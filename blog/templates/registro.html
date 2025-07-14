@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h2>Registro de Usuario</h2>
+
+<!-- Formulario de registro -->
+<form method="post">
+    {% csrf_token %} <!-- Token de seguridad -->
+    {{ form.as_p }} <!-- Mostrar los campos del formulario como párrafos -->
+    <button type="submit">Registrarse</button> <!-- Botón para crear el usuario -->
+</form>
+{% endblock %}

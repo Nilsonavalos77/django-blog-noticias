@@ -1,0 +1,24 @@
+{% extends 'base.html' %} <!-- Hereda de base.html -->
+
+{% block contenido %}
+    <h1>Noticias Recientes</h1> <!-- Título principal -->
+
+    <!-- Bucle que recorre todas las noticias -->
+    {% for noticia in noticias %}
+        <div>
+            <!-- Título con enlace a la página de detalle de esa noticia -->
+            <h2><a href="{% url 'detalle_noticia' noticia.pk %}">{{ noticia.titulo }}</a></h2>
+
+            <!-- Si la noticia tiene imagen, mostrarla -->
+            {% if noticia.imagen %}
+                <img src="{{ noticia.imagen.url }}" width="200">
+            {% endif %}
+
+            <!-- Mostrar el resumen o bajada -->
+            <p>{{ noticia.resumen }}</p>
+        </div>
+    {% empty %}
+        <!-- Si no hay noticias -->
+        <p>No hay noticias aún.</p>
+    {% endfor %}
+{% endblock %}

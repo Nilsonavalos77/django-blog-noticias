@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+    <!-- Título de la noticia -->
+    <h1>{{ noticia.titulo }}</h1>
+
+    <!-- Mostrar imagen si tiene -->
+    {% if noticia.imagen %}
+        <img src="{{ noticia.imagen.url }}" width="400">
+    {% endif %}
+
+    <!-- Mostrar el contenido completo -->
+    <p>{{ noticia.contenido }}</p>
+
+    <hr> <!-- Separación visual -->
+
+    <h3>Comentarios</h3>
+    <!-- Bucle de comentarios relacionados a la noticia -->
+    {% for comentario in comentarios %}
+        <p><strong>{{ comentario.autor }}</strong>: {{ comentario.texto }}</p>
+    {% empty %}
+        <!-- Si aún no hay comentarios -->
+        <p>No hay comentarios todavía.</p>
+    {% endfor %}
+{% endblock %}

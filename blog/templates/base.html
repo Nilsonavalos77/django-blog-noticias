@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"> <!-- Codificación del sitio para soportar tildes y caracteres especiales -->
+    <title>Blog de Noticias</title> <!-- Título del navegador -->
+</head>
+<body>
+    <!-- Barra de navegación que cambia si el usuario está autenticado -->
+    <nav>
+        <a href="{% url 'inicio' %}">Inicio</a> <!-- Enlace a la portada -->
+        
+        {% if user.is_authenticated %} <!-- Si el usuario está logueado -->
+            <a href="{% url 'logout' %}">Cerrar sesión</a>
+        {% else %} <!-- Si el usuario no está logueado -->
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+            <a href="{% url 'registro' %}">Registrarse</a>
+        {% endif %}
+    </nav>
+    <hr> <!-- Línea horizontal como separación -->
+
+    <!-- Aquí se insertará el contenido específico de cada página -->
+    {% block contenido %}{% endblock %}
+</body>
+</html>
