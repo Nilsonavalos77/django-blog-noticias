@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block contenido %}
+<h1>Agregar Comentario a: "{{ noticia.titulo }}"</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="comentario">Comentario:</label><br>
+    <textarea id="comentario" name="comentario" rows="4" required></textarea><br><br>
+    <button type="submit">Enviar</button>
+</form>
+
+<a href="{% url 'detalle_noticia' noticia.pk %}">Volver a la noticia</a>
+{% endblock %}

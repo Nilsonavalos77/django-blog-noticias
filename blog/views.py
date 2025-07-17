@@ -2,21 +2,28 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q  # Para búsquedas
 from .models import Noticia, Comentario
-from .forms import NoticiaForm, ComentarioForm  # Formularios que vamos a crear
+from .forms import NoticiaForm, ComentarioForm
 
-# Vista para mostrar la portada con todas las noticias (acceso libre)
+# ✅ Vista de inicio con buscador incluido
 def inicio(request):
-    noticias = Noticia.objects.order_by('-fecha_publicacion')
-    return render(request, 'inicio.html', {'noticias': noticias})
+    query = request.GET.get('q')  # Captura la búsqueda desde la barra
+    if query:
+        noticias = Noticia.objects.filter(
+            Q(titulo__icontains=query) | Q(resumen__icontains=query)
+        ).order_by('-fecha_publicacion')
+    else:
+        noticias = Noticia.objects.order_by('-fecha_publicacion')
+    return render(request, 'inicio.html', {'noticias': noticias, 'query': query})
 
-# Vista para ver el detalle de una noticia (acceso libre)
+# ✅ Vista de detalle de noticia
 def detalle_noticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
     comentarios = noticia.comentarios.all()
     return render(request, 'detalle_noticia.html', {'noticia': noticia, 'comentarios': comentarios})
 
-# Vista para registrar un nuevo usuario (acceso libre)
+# ✅ Vista de registro
 def registro(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -28,11 +35,11 @@ def registro(request):
         form = UserCreationForm()
     return render(request, 'registro.html', {'form': form})
 
-# Check si es admin (staff)
+# ✅ Función para verificar si es admin
 def es_admin(user):
     return user.is_staff
 
-# Crear noticia (solo admin)
+# ✅ Crear noticia (admin)
 @user_passes_test(es_admin)
 def crear_noticia(request):
     if request.method == 'POST':
@@ -46,7 +53,7 @@ def crear_noticia(request):
         form = NoticiaForm()
     return render(request, 'crear_noticia.html', {'form': form})
 
-# Editar noticia (solo admin)
+# ✅ Editar noticia (admin)
 @user_passes_test(es_admin)
 def editar_noticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
@@ -59,7 +66,7 @@ def editar_noticia(request, pk):
         form = NoticiaForm(instance=noticia)
     return render(request, 'crear_noticia.html', {'form': form})
 
-# Eliminar noticia (solo admin)
+# ✅ Eliminar noticia (admin)
 @user_passes_test(es_admin)
 def eliminar_noticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
@@ -68,7 +75,7 @@ def eliminar_noticia(request, pk):
         return redirect('inicio')
     return render(request, 'eliminar_noticia.html', {'noticia': noticia})
 
-# Agregar comentario (solo usuario logueado)
+# ✅ Agregar comentario (logueado)
 @login_required
 def agregar_comentario(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
@@ -84,7 +91,7 @@ def agregar_comentario(request, pk):
         form = ComentarioForm()
     return render(request, 'agregar_comentario.html', {'form': form, 'noticia': noticia})
 
-# Editar comentario (solo autor o admin)
+# ✅ Editar comentario (autor o admin)
 @login_required
 def editar_comentario(request, pk):
     comentario = get_object_or_404(Comentario, pk=pk)
@@ -99,7 +106,7 @@ def editar_comentario(request, pk):
         form = ComentarioForm(instance=comentario)
     return render(request, 'editar_comentario.html', {'form': form, 'comentario': comentario})
 
-# Eliminar comentario (solo autor o admin)
+# ✅ Eliminar comentario (autor o admin)
 @login_required
 def eliminar_comentario(request, pk):
     comentario = get_object_or_404(Comentario, pk=pk)

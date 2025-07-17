@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block contenido %}
+<h1>Eliminar Comentario</h1>
+
+<p>¿Confirmás eliminar este comentario?</p>
+<p><em>{{ comentario.texto }}</em></p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, eliminar</button>
+    <a href="{% url 'detalle_noticia' comentario.noticia.pk %}">Cancelar</a>
+</form>
+{% endblock %}
