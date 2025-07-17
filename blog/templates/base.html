@@ -5,20 +5,38 @@
     <title>Blog de Noticias</title> <!-- Título del navegador -->
 </head>
 <body>
-    <!-- Barra de navegación que cambia si el usuario está autenticado -->
+    <!-- Barra de navegación principal -->
     <nav>
-        <a href="{% url 'inicio' %}">Inicio</a> <!-- Enlace a la portada -->
-        
-        {% if user.is_authenticated %} <!-- Si el usuario está logueado -->
+        <!-- Enlace siempre visible a la página de inicio -->
+        <a href="{% url 'inicio' %}">Inicio</a>
+
+        <!-- Verifica si el usuario ha iniciado sesión -->
+        {% if user.is_authenticated %}
+            <!-- Muestra el nombre del usuario actualmente logueado -->
+            <span>Hola, {{ user.username }}!</span>
+
+            <!-- Si el usuario es staff (admin), se muestra el enlace para crear una noticia -->
+            {% if user.is_staff %}
+                <a href="{% url 'crear_noticia' %}">+ Crear noticia</a> <!-- Enlace a la vista para admins -->
+            {% endif %}
+
+            <!-- Enlace para cerrar sesión disponible para usuarios logueados -->
             <a href="{% url 'logout' %}">Cerrar sesión</a>
-        {% else %} <!-- Si el usuario no está logueado -->
+
+        {% else %}  <!-- Si el usuario NO ha iniciado sesión -->
+
+            <!-- Enlace para ir a la página de login -->
             <a href="{% url 'login' %}">Iniciar sesión</a>
+
+            <!-- Enlace para ir a la página de registro -->
             <a href="{% url 'registro' %}">Registrarse</a>
+
         {% endif %}
     </nav>
-    <hr> <!-- Línea horizontal como separación -->
 
-    <!-- Aquí se insertará el contenido específico de cada página -->
+    <hr> <!-- Línea horizontal como separación visual -->
+
+    <!-- Contenedor para mostrar contenido específico de cada página (heredado desde otros templates) -->
     {% block contenido %}{% endblock %}
 </body>
 </html>
