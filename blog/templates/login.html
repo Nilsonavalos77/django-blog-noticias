@@ -1,12 +1,46 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
-<h2>Iniciar Sesión</h2>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- Tarjeta con sombra y fondo claro -->
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4 bg-light rounded">
+          <h2 class="text-center text-primary mb-4">
+            <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+          </h2>
 
-<!-- Formulario de inicio de sesión -->
-<form method="post">
-    {% csrf_token %} <!-- Token de seguridad contra ataques CSRF -->
-    {{ form.as_p }} <!-- Renderiza el formulario como párrafos -->
-    <button type="submit">Entrar</button> <!-- Botón para enviar el formulario -->
-</form>
+          <!-- Formulario de login -->
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <!-- Renderiza el formulario con clases Bootstrap -->
+            {% for field in form %}
+              <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                <!-- Muestra errores del campo si los hay -->
+                {% if field.errors %}
+                  <div class="text-danger small">{{ field.errors|striptags }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+
+            <!-- Botón de envío estilizado -->
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-arrow-right-to-bracket me-1"></i> Entrar
+              </button>
+            </div>
+          </form>
+
+          <!-- Enlace para registro debajo -->
+          <div class="mt-3 text-center">
+            <small>¿No tenés cuenta? <a href="{% url 'registro' %}">Registrate aquí</a></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

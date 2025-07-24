@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-body p-5 bg-light rounded">
+      <h2 class="card-title text-center mb-4 text-primary">
+        <i class="fas fa-info-circle me-2"></i> Información del sitio
+      </h2>
+
+      <p class="mb-3 fs-5">
+        <strong>Este blog</strong> fue desarrollado como parte de un proyecto educativo en el área de
+        <span class="text-success">desarrollo web fullstack</span>, integrando tecnologías modernas como
+        <strong>Django</strong> y <strong>Bootstrap 5</strong>.
+      </p>
+
+      <p class="mb-3">
+        El sitio está dedicado a la publicación de <strong>noticias</strong> sobre diversos temas de interés general,
+        buscando siempre una <span class="text-warning">presentación clara, accesible y organizada</span>.
+        Se prioriza la experiencia del usuario en todos los dispositivos.
+      </p>
+
+      <p class="mb-3">
+        El objetivo es tanto <strong>informar</strong> como <strong>aprender</strong> sobre buenas prácticas de programación,
+        estructura de proyectos web, diseño responsivo, uso de rutas, plantillas y seguridad básica en aplicaciones.
+      </p>
+
+      <div class="bg-white p-4 rounded shadow-sm mt-4">
+        <h5 class="text-secondary mb-3">📌 Características del sitio:</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-check-circle text-success me-2"></i> Publicación y visualización de artículos/noticias</li>
+          <li><i class="fas fa-check-circle text-success me-2"></i> Buscador integrado</li>
+          <li><i class="fas fa-check-circle text-success me-2"></i> Registro e inicio de sesión</li>
+          <li><i class="fas fa-check-circle text-success me-2"></i> Diseño adaptable a dispositivos móviles</li>
+        </ul>
+      </div>
+
+      <div class="mt-5">
+        <p class="mb-2">
+          <strong>Creado por:</strong> Tu Nombre
+        </p>
+        <p>
+          <strong>Contacto:</strong>
+          <a href="mailto:tuemail@ejemplo.com" class="text-decoration-none">
+            <i class="fas fa-envelope text-primary me-1"></i> tuemail@ejemplo.com
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

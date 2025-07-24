@@ -7,6 +7,12 @@ from . import views
 # Importa las vistas de autenticación integradas de Django (login, logout)
 from django.contrib.auth import views as auth_views
 
+from django.urls import path
+from . import views
+
+from django.shortcuts import render
+
+
 # Lista de rutas disponibles en la aplicación
 urlpatterns = [
     # Ruta para la página principal (portada de noticias)
@@ -23,4 +29,13 @@ urlpatterns = [
 
     # Ruta para que un usuario se registre en el sitio (usa tu vista personalizada)
     path('registro/', views.registro, name='registro'),
+
+    # Ruta para crear una nueva noticia (solo accesible para administradores)
+    path('crear_noticia/', views.crear_noticia, name='crear_noticia'),
+    
+    # Ruta para editar una noticia existente (solo accesible para administradores)
+    path('acerca-de/', views.acerca_de, name='acerca_de'),
+
+
+    
 ]

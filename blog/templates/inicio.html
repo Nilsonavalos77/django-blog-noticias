@@ -1,24 +1,56 @@
 {% extends 'base.html' %} <!-- Hereda de base.html -->
 
 {% block contenido %}
-    <h1>Noticias Recientes</h1> <!-- Título principal -->
+<div class="row"> <!-- Fila de Bootstrap para dividir en columnas -->
 
-    <!-- Bucle que recorre todas las noticias -->
-    {% for noticia in noticias %}
-        <div>
-            <!-- Título con enlace a la página de detalle de esa noticia -->
-            <h2><a href="{% url 'detalle_noticia' noticia.pk %}">{{ noticia.titulo }}</a></h2>
+    <!-- Columna principal (noticias recientes) -->
+    <div class="col-md-9">
+        <h1>Noticias Recientes</h1> <!-- Título principal -->
 
-            <!-- Si la noticia tiene imagen, mostrarla -->
-            {% if noticia.imagen %}
-                <img src="{{ noticia.imagen.url }}" width="200">
-            {% endif %}
+        <!-- Bucle que recorre todas las noticias -->
+        {% for noticia in noticias %}
+            <div class="mb-4 border-bottom pb-3">
+                <!-- Título con enlace a la página de detalle -->
+                <h2>
+                    <a href="{% url 'detalle_noticia' noticia.pk %}" class="text-decoration-none text-dark">
+                        {{ noticia.titulo }}
+                    </a>
+                </h2>
 
-            <!-- Mostrar el resumen o bajada -->
-            <p>{{ noticia.resumen }}</p>
+                <!-- Si la noticia tiene imagen, mostrarla -->
+                {% if noticia.imagen %}
+                   <img src="{{ noticia.imagen.url }}" 
+                    class="img-fluid rounded mb-3 w-100" 
+                    style="max-height: 400px; object-fit: cover;" 
+                     alt="Imagen de la noticia">
+                {% endif %}
+
+                <!-- Mostrar el resumen o bajada -->
+                <p>{{ noticia.resumen }}</p>
+            </div>
+        {% empty %}
+            <!-- Si no hay noticias -->
+            <p>No hay noticias aún.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Columna lateral derecha (noticias destacadas) -->
+    <div class="col-md-3">
+        <div class="p-2 bg-light rounded shadow-sm" style="font-size: 0.9rem;">
+            <h4 class="mb-3 text-center">📰 Noticias Destacadas</h4>
+
+            <!-- Mostramos las 3 primeras noticias como destacadas -->
+            {% for noticia in noticias|slice:":3" %}
+                <div class="mb-3 border-bottom pb-2">
+                    <h6 class="text-primary">{{ noticia.titulo }}</h6>
+                    <small class="text-muted">
+                        {{ noticia.fecha_publicacion|date:"d M Y" }}
+                    </small><br>
+                    <a href="{% url 'detalle_noticia' noticia.pk %}" class="link-secondary">Leer más →</a>
+                </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <!-- Si no hay noticias -->
-        <p>No hay noticias aún.</p>
-    {% endfor %}
+    </div>
+
+</div> <!-- Fin de la fila -->
 {% endblock %}
