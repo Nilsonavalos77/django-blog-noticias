@@ -1,72 +1,124 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Blog de Noticias</title>
 
     <!-- Bootstrap 5 desde CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Fuente de iconos Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Estilo personalizado para botones uniformes -->
+    <style>
+        .btn-navbar-custom {
+            color: white !important;
+            border: 0px solid white;
+            padding: 6px 16px;
+            font-size: 0.875rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-width: 110px; /* ancho mínimo para uniformidad */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none; /* elimina subrayado de links */
+            cursor: pointer;
+        }
+
+        .btn-navbar-custom:hover {
+            background-color: #495057; /* Gris más claro */
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .btn-navbar-custom i {
+            margin-right: 6px;
+        }
+
+        /* Opcional: para que los form buttons tengan margen cero y se alineen bien */
+        form .btn-navbar-custom {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar principal -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <!-- Contenedor fluid que permite flexbox para alinear elementos -->
-        <div class="container-fluid d-flex flex-wrap align-items-center justify-content-between">
-            
-            <!-- Logo o título a la izquierda -->
+        <div
+            class="container-fluid d-flex flex-wrap align-items-center justify-content-between"
+        >
             <a class="navbar-brand" href="{% url 'inicio' %}">Blog de Noticias</a>
 
-            <!-- Botón hamburguesa para dispositivos móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido"
-                aria-controls="navbarContenido" aria-expanded="false" aria-label="Alternar navegación">
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarContenido"
+                aria-controls="navbarContenido"
+                aria-expanded="false"
+                aria-label="Alternar navegación"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Contenido que colapsa en pantallas pequeñas -->
             <div class="collapse navbar-collapse" id="navbarContenido">
-                <!-- Espacio vacío para separar elementos (puede usarse para futuras opciones) -->
                 <ul class="navbar-nav me-auto"></ul>
 
-                <!-- Formulario de búsqueda centrado y responsive -->
-                <form class="d-flex flex-grow-1 mx-3 mx-lg-auto" method="get" action="{% url 'inicio' %}" style="max-width: 400px;">
-                    <input class="form-control me-2" type="search" placeholder="Buscar noticias..." aria-label="Buscar" name="buscar" value="{{ request.GET.buscar }}">
-                    <button class="btn btn-outline-light btn-sm" type="submit">Buscar</button>
+                <!-- Formulario de búsqueda -->
+                <form
+                    class="d-flex flex-grow-1 mx-3 mx-lg-auto"
+                    method="get"
+                    action="{% url 'inicio' %}"
+                    style="max-width: 400px"
+                >
+                    <input
+                        class="form-control me-2"
+                        type="search"
+                        placeholder="Buscar noticias..."
+                        aria-label="Buscar"
+                        name="q"
+                        value="{{ request.GET.buscar }}"
+                    />
+                    <button class="btn btn-navbar-custom" type="submit">Buscar</button>
                 </form>
 
-                <!-- Menú de autenticación y botón de información a la derecha -->
+                <!-- Autenticación + información -->
                 <ul class="navbar-nav ms-auto align-items-center">
                     {% if user.is_authenticated %}
-                        <!-- Mensaje de bienvenida con margen a la derecha -->
-                        <li class="nav-item">
-                            <span class="navbar-text text-white me-3">
-                                Bienvenido, {{ user.username }}
-                            </span>
-                        </li>
-                        <!-- Botón para cerrar sesión, pequeño y con margen a la derecha -->
-                        <li class="nav-item me-3">
-                            <form method="post" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-light btn-sm me-2">Cerrar sesión</button>
-                            </form>
-                        </li>
+                    <li class="nav-item">
+                        <span class="navbar-text text-white me-3"
+                            >Bienvenido, {{ user.username }}</span
+                        >
+                    </li>
+                    <li class="nav-item me-3">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-navbar-custom">
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    </li>
                     {% else %}
-                        <!-- Enlaces para iniciar sesión y registrarse -->
-                        <li class="nav-item me-3">
-                            <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
-                        </li>
+                    <li class="nav-item me-3">
+                        <a class="btn btn-navbar-custom" href="{% url 'login' %}">
+                            Iniciar sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-navbar-custom" href="{% url 'registro' %}">
+                            Registrarse
+                        </a>
+                    </li>
                     {% endif %}
-
-                    <!-- Botón con ícono de Información, pequeño y con margen izquierda -->
                     <li class="nav-item ms-2">
-                        <a href="{% url 'acerca_de' %}" class="btn btn-outline-light btn-sm px-3" style="border: none;">
-                    <i class="fas fa-info-circle me-2"></i> Información
+                        <a href="{% url 'acerca_de' %}" class="btn btn-navbar-custom">
+                            <i class="fas fa-info-circle"></i> Información
                         </a>
                     </li>
                 </ul>
@@ -74,13 +126,12 @@
         </div>
     </nav>
 
-    <!-- Contenedor principal para el contenido dinámico de cada página -->
+    <!-- Contenido principal -->
     <div class="container-fluid px-3 mt-4">
-        {% block contenido %}
-        {% endblock %}
+        {% block contenido %} {% endblock %}
     </div>
 
-    <!-- Bootstrap JS Bundle con Popper -->
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

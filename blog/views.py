@@ -2,39 +2,42 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q  # Para búsquedas
-from .models import Noticia, Comentario
+from django.db.models import Q  # Para búsquedas complejas con OR
+from .models import Noticia, Comentario, Categoria
 from .forms import NoticiaForm, ComentarioForm
+from .forms import CustomUserCreationForm  # importa el formulario personalizado
 
-from django.db.models import Q  # Import necesario para búsquedas complejas con OR
-
+# ✅ Vista de inicio con búsqueda, noticias destacadas y filtro por categoría
 def inicio(request):
-    query = request.GET.get('q')  # Captura el parámetro 'q' enviado desde el formulario de búsqueda
+    query = request.GET.get('q')  # Captura el texto ingresado en el buscador
+    categoria_id = request.GET.get('categoria')  # Captura el ID de categoría seleccionada
+    categorias = Categoria.objects.all()  # Trae todas las categorías para mostrar como botones
+
+    # Filtro principal según búsqueda o categoría
     if query:
-        # Si hay búsqueda, filtramos las noticias cuyo título o resumen contengan el texto de búsqueda (insensible a mayúsculas)
         noticias = Noticia.objects.filter(
             Q(titulo__icontains=query) | Q(resumen__icontains=query)
         ).order_by('-fecha_publicacion')
+    elif categoria_id:
+        noticias = Noticia.objects.filter(categoria__id=categoria_id).order_by('-fecha_publicacion')
     else:
-        # Si no hay búsqueda, traemos todas las noticias ordenadas por fecha descendente
         noticias = Noticia.objects.order_by('-fecha_publicacion')
 
-    # Traemos las noticias destacadas (destacada=True), limitando a 3 para mostrar en la barra lateral
+    # Noticias destacadas para la barra lateral (máx 3)
     noticias_destacadas = Noticia.objects.filter(destacada=True).order_by('-fecha_publicacion')[:3]
 
-    # Renderizamos la plantilla pasando las noticias filtradas, las destacadas y la query para mostrar en el input
+    # Renderiza la plantilla con todas las variables
     return render(request, 'inicio.html', {
         'noticias': noticias,
         'noticias_destacadas': noticias_destacadas,
         'query': query,
+        'categorias': categorias,
+        'categoria_actual': int(categoria_id) if categoria_id else None,
     })
 
-#boton de información del sitio
-from django.shortcuts import render
-
+# ✅ Página "Acerca de"
 def acerca_de(request):
     return render(request, 'acerca_de.html')
-
 
 # ✅ Vista de detalle de noticia
 def detalle_noticia(request, pk):
@@ -42,23 +45,25 @@ def detalle_noticia(request, pk):
     comentarios = noticia.comentarios.all()
     return render(request, 'detalle_noticia.html', {'noticia': noticia, 'comentarios': comentarios})
 
-# ✅ Vista de registro
+# ✅ Vista de registro de usuario
 def registro(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
+        print(form.fields.keys())  # Depuración
         if form.is_valid():
             usuario = form.save()
             login(request, usuario)
             return redirect('inicio')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
+        print(form.fields.keys())  # Depuración
     return render(request, 'registro.html', {'form': form})
 
-# ✅ Función para verificar si es admin
+# ✅ Verifica si el usuario es admin
 def es_admin(user):
     return user.is_staff
 
-# ✅ Crear noticia (admin)
+# ✅ Crear noticia (solo admins)
 @user_passes_test(es_admin)
 def crear_noticia(request):
     if request.method == 'POST':
@@ -72,7 +77,7 @@ def crear_noticia(request):
         form = NoticiaForm()
     return render(request, 'crear_noticia.html', {'form': form})
 
-# ✅ Editar noticia (admin)
+# ✅ Editar noticia (solo admins)
 @user_passes_test(es_admin)
 def editar_noticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
@@ -85,7 +90,7 @@ def editar_noticia(request, pk):
         form = NoticiaForm(instance=noticia)
     return render(request, 'crear_noticia.html', {'form': form})
 
-# ✅ Eliminar noticia (admin)
+# ✅ Eliminar noticia (solo admins)
 @user_passes_test(es_admin)
 def eliminar_noticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
@@ -94,7 +99,7 @@ def eliminar_noticia(request, pk):
         return redirect('inicio')
     return render(request, 'eliminar_noticia.html', {'noticia': noticia})
 
-# ✅ Agregar comentario (logueado)
+# ✅ Agregar comentario (solo usuarios logueados)
 @login_required
 def agregar_comentario(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
@@ -110,7 +115,7 @@ def agregar_comentario(request, pk):
         form = ComentarioForm()
     return render(request, 'agregar_comentario.html', {'form': form, 'noticia': noticia})
 
-# ✅ Editar comentario (autor o admin)
+# ✅ Editar comentario (solo autor o admin)
 @login_required
 def editar_comentario(request, pk):
     comentario = get_object_or_404(Comentario, pk=pk)
@@ -125,7 +130,7 @@ def editar_comentario(request, pk):
         form = ComentarioForm(instance=comentario)
     return render(request, 'editar_comentario.html', {'form': form, 'comentario': comentario})
 
-# ✅ Eliminar comentario (autor o admin)
+# ✅ Eliminar comentario (solo autor o admin)
 @login_required
 def eliminar_comentario(request, pk):
     comentario = get_object_or_404(Comentario, pk=pk)
@@ -136,4 +141,3 @@ def eliminar_comentario(request, pk):
         comentario.delete()
         return redirect('detalle_noticia', pk=noticia_pk)
     return render(request, 'eliminar_comentario.html', {'comentario': comentario})
-

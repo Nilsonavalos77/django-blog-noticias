@@ -5,10 +5,17 @@
 
 <form method="post">
     {% csrf_token %}
-    <label for="comentario">Comentario:</label><br>
-    <textarea id="comentario" name="comentario" rows="4" required></textarea><br><br>
-    <button type="submit">Enviar</button>
+
+    <!-- Campo de texto para el comentario -->
+    <div class="mb-3">
+        {{ form.texto.label_tag }}  <!-- Muestra la etiqueta del campo -->
+        {{ form.texto }}  <!-- Muestra el campo textarea -->
+    </div>
+
+    <!-- Botón para enviar -->
+    <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 
+<!-- Enlace para volver a la noticia -->
 <a href="{% url 'detalle_noticia' noticia.pk %}">Volver a la noticia</a>
 {% endblock %}

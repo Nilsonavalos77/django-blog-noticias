@@ -1,30 +1,38 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
-<div class="container mt-5">
-  <div class="card shadow-lg border-0">
-    <div class="card-body p-5 bg-light rounded">
+<div class="container mt-5"><!-- Contenedor principal con margen superior -->
+
+  <div class="card shadow-lg border-0"><!-- Tarjeta con sombra y sin borde -->
+  
+    <div class="card-body p-5 bg-light rounded"><!-- Cuerpo de la tarjeta con padding, fondo claro y bordes redondeados -->
+    
+      <!-- Título con icono y estilo centrado -->
       <h2 class="card-title text-center mb-4 text-primary">
         <i class="fas fa-info-circle me-2"></i> Información del sitio
       </h2>
 
+      <!-- Párrafo descriptivo principal -->
       <p class="mb-3 fs-5">
-        <strong>Este blog</strong> fue desarrollado como parte de un proyecto educativo en el área de
-        <span class="text-success">desarrollo web fullstack</span>, integrando tecnologías modernas como
+        <strong>Este blog</strong> se desarrolló como parte del programa educativo <strong>INFORMATORIO 2025</strong>, específicamente en el área de
+        <span class="text-success">desarrollo web fullstack (etapa 2)</span>, integrando tecnologías modernas como
         <strong>Django</strong> y <strong>Bootstrap 5</strong>.
       </p>
 
-      <p class="mb-3">
+      <!-- Párrafo sobre la finalidad del sitio -->
+      <p class="mb-3 fs-5">
         El sitio está dedicado a la publicación de <strong>noticias</strong> sobre diversos temas de interés general,
         buscando siempre una <span class="text-warning">presentación clara, accesible y organizada</span>.
         Se prioriza la experiencia del usuario en todos los dispositivos.
       </p>
 
-      <p class="mb-3">
+      <!-- Párrafo sobre los objetivos del proyecto -->
+      <p class="mb-3 fs-5">
         El objetivo es tanto <strong>informar</strong> como <strong>aprender</strong> sobre buenas prácticas de programación,
         estructura de proyectos web, diseño responsivo, uso de rutas, plantillas y seguridad básica en aplicaciones.
       </p>
 
+      <!-- Sección destacada con lista de características -->
       <div class="bg-white p-4 rounded shadow-sm mt-4">
         <h5 class="text-secondary mb-3">📌 Características del sitio:</h5>
         <ul class="list-unstyled">
@@ -35,18 +43,39 @@
         </ul>
       </div>
 
+      <!-- Información de autores y contacto -->
       <div class="mt-5">
+        <!-- Autores -->
         <p class="mb-2">
-          <strong>Creado por:</strong> Tu Nombre
+          <strong>Autores:</strong> Nilson Ezequiel Avalos, Nallma Belén Rodríguez, Jose Antonio Gonzalez, Juliana Marighetti.
         </p>
-        <p>
-          <strong>Contacto:</strong>
-          <a href="mailto:tuemail@ejemplo.com" class="text-decoration-none">
-            <i class="fas fa-envelope text-primary me-1"></i> tuemail@ejemplo.com
+        
+        <!-- Contactos con correos electrónicos -->
+        <p class="mb-2">
+          <strong>Contacto:</strong><br>
+          <a href="mailto:nilson.avalos94@gmail.com" class="text-decoration-none">
+            <i class="fas fa-envelope text-primary me-1"></i> nilson.avalos94@gmail.com
+          </a><br>
+          <a href="mailto:nallmirdz@gmail.com" class="text-decoration-none">
+            <i class="fas fa-envelope text-primary me-1"></i> nallmirdz@gmail.com
+          </a><br>
+          <a href="mailto:autosoikos@gmail.com" class="text-decoration-none">
+            <i class="fas fa-envelope text-primary me-1"></i> autosoikos@gmail.com
+          </a><br>
+          <a href="mailto:Juliana.marighetti18@gmail.com" class="text-decoration-none">
+            <i class="fas fa-envelope text-primary me-1"></i> Juliana.marighetti18@gmail.com
           </a>
         </p>
+
+        <!-- Grupo -->
+        <p>
+          <strong>Grupo:</strong> Pantalla Azul
+        </p>
       </div>
-    </div>
-  </div>
-</div>
+
+    </div><!-- Fin card-body -->
+    
+  </div><!-- Fin card -->
+  
+</div><!-- Fin container -->
 {% endblock %}

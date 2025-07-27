@@ -21,6 +21,10 @@ urlpatterns = [
     # Ruta para ver el detalle de una noticia según su ID (pk = primary key)
     path('noticia/<int:pk>/', views.detalle_noticia, name='detalle_noticia'),
 
+    path('noticia/<int:pk>/comentario/', views.agregar_comentario, name='agregar_comentario'),
+    # Ruta para editar un comentario existente
+
+    
     # Ruta para iniciar sesión (usa la vista incorporada de Django y un template personalizado)
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 
