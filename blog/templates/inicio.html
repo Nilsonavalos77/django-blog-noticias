@@ -17,7 +17,7 @@
     <div class="col-md-9">
 
         <!-- ✅ Botón para subir noticia (solo si el usuario está logueado) -->
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.is_staff %}
         <div class="mb-3 text-end">
             <a href="{% url 'crear_noticia' %}" class="btn btn-success">
                 <i class="fas fa-plus-circle"></i> Subir Noticia
