@@ -63,8 +63,8 @@ def registro(request):
 def es_admin(user):
     return user.is_staff
 
-# ✅ Crear noticia (solo admins)
-@user_passes_test(es_admin)
+# ✅ Crear noticia 
+@login_required
 def crear_noticia(request):
     if request.method == 'POST':
         form = NoticiaForm(request.POST, request.FILES)

@@ -1,39 +1,61 @@
 from django import forms
-from .models import Comentario
 from .models import Noticia, Comentario
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-
 # Formulario para crear o editar una noticia
 class NoticiaForm(forms.ModelForm):
     class Meta:
-        model = Noticia  # Modelo base para este formulario
+        model = Noticia
         fields = [
-            'titulo',      # Campo para el título de la noticia
-            'resumen',     # Campo para un resumen corto de la noticia
-            'contenido',   # Campo para el texto completo de la noticia
-            'categoria',   # Campo para asignar la noticia a una categoría existente
-            'imagen',      # Campo para subir una imagen relacionada a la noticia
-            'destacada'    # Campo booleano para marcar si la noticia es destacada o no
+            'titulo',
+            'resumen',
+            'contenido',
+            'categoria',
+            'imagen',
+            'destacada'
         ]
+        widgets = {
+            'titulo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Título de la noticia'
+            }),
+            'resumen': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Resumen breve de la noticia'
+            }),
+            'contenido': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Contenido completo de la noticia'
+            }),
+            'categoria': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'imagen': forms.ClearableFileInput(attrs={
+                'class': 'form-control'
+            }),
+            'destacada': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            })
+        }
 
 # Formulario para crear o editar un comentario
 class ComentarioForm(forms.ModelForm):
     class Meta:
-        model = Comentario  # Modelo base para este formulario
-        fields = ['texto']  # Solo el campo texto es editable por el usuario
+        model = Comentario
+        fields = ['texto']
         widgets = {
-            # Widget para personalizar el textarea del campo texto
             'texto': forms.Textarea(
                 attrs={
-                    'rows': 3,  # Alto del textarea en filas
-                    'placeholder': 'Escribe tu comentario...'  # Texto guía dentro del textarea
+                    'rows': 3,
+                    'placeholder': 'Escribe tu comentario...',
+                    'class': 'form-control'
                 }
             )
         }
 
-
+# Formulario personalizado de registro de usuario
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Correo electrónico")
 
@@ -47,3 +69,11 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+from django import forms
+from .models import Noticia
+
+class NoticiaForm(forms.ModelForm):
+    class Meta:
+        model = Noticia
+        fields = ['titulo', 'resumen', 'contenido', 'categoria', 'imagen', 'destacada']

@@ -1,34 +1,40 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}  # Hereda la estructura base de la página #
 
-{% block contenido %}
-<h1>Crear Nueva Noticia</h1>
+{% block contenido %}  {# Aquí va el contenido específico de esta página #}
+<div class="container mt-5">  {# Contenedor con margen superior para separar del borde #}
+  <div class="row justify-content-center">  {# Fila que centra el contenido horizontalmente #}
+    <div class="col-md-8">  {# Columna que ocupa 8/12 partes en pantallas medianas en adelante #}
+      <div class="card shadow-lg border-0">  {# Tarjeta con sombra y sin borde #}
+        <div class="card-body p-4 bg-white rounded">  {# Cuerpo de la tarjeta con padding, fondo blanco y bordes redondeados #}
+          
+          <h2 class="text-center text-primary mb-4">  {# Título centrado, texto azul y margen inferior #}
+            <i class="fas fa-newspaper me-2"></i> Crear Nueva Noticia  {# Icono con margen derecha y texto #}
+          </h2>
 
-<!-- Formulario para crear noticia -->
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %} <!-- Token para seguridad CSRF -->
+          <form method="post" enctype="multipart/form-data" novalidate>  {# Formulario que acepta archivos (imagen) y desactiva validación HTML5 #}
+            {% csrf_token %}  {# Token para proteger contra CSRF #}
 
-    <label for="titulo">Título:</label><br>
-    <input type="text" id="titulo" name="titulo" required><br><br>
+            {% for field in form %}  {# Recorre todos los campos del formulario Django #}
+              <div class="mb-3">  {# Margen inferior para separar campos #}
+                {{ field.label_tag }}  {# Etiqueta (label) del campo #}
+                {{ field }}  {# Campo de formulario (input, textarea, select, checkbox, etc) #}
+                {% if field.errors %}  {# Si hay errores de validación en este campo #}
+                  <div class="text-danger small">{{ field.errors|striptags }}</div>  {# Muestra errores en rojo y tamaño pequeño #}
+                {% endif %}
+              </div>
+            {% endfor %}
 
-    <label for="resumen">Resumen:</label><br>
-    <textarea id="resumen" name="resumen"></textarea><br><br>
+            <div class="d-grid mt-4">  {# Contenedor para que el botón ocupe todo el ancho y tenga margen superior #}
+              <button type="submit" class="btn btn-primary">  {# Botón azul primario para enviar el formulario #}
+                <i class="fas fa-save me-1"></i> Crear  {# Icono de guardar con margen derecha y texto #}
+              </button>
+            </div>
 
-    <label for="contenido">Contenido:</label><br>
-    <textarea id="contenido" name="contenido" required></textarea><br><br>
+          </form>
 
-    <label for="categoria">Categoría:</label><br>
-    <select id="categoria" name="categoria">
-        {% for categoria in categorias %}
-            <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
-        {% endfor %}
-    </select><br><br>
-
-    <label for="imagen">Imagen:</label><br>
-    <input type="file" id="imagen" name="imagen"><br><br>
-
-    <label for="destacada">Destacada:</label>
-    <input type="checkbox" id="destacada" name="destacada"><br><br>
-
-    <button type="submit">Crear</button>
-</form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

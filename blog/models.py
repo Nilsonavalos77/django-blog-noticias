@@ -9,16 +9,17 @@ class Categoria(models.Model):
 
 class Noticia(models.Model):
     titulo = models.CharField(max_length=200)
-    resumen = models.TextField(max_length=300, null=True, blank=True)
+    resumen = models.TextField(blank=True, null=True)
     contenido = models.TextField()
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='noticias/', blank=True, null=True)
+    destacada = models.BooleanField(default=False)
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
-    imagen = models.ImageField(upload_to='imagenes/', null=True, blank=True)
-    destacada = models.BooleanField(default=False)  # para mostrar en portada
 
     def __str__(self):
         return self.titulo
+
 
 class Comentario(models.Model):
     noticia = models.ForeignKey(Noticia, on_delete=models.CASCADE, related_name='comentarios')
