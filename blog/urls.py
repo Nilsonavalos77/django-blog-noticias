@@ -1,45 +1,31 @@
-# Importa la función path para definir rutas
+# Importaciones necesarias
 from django.urls import path
-
-# Importa las vistas personalizadas que creaste en views.py
-from . import views
-
-# Importa las vistas de autenticación integradas de Django (login, logout)
 from django.contrib.auth import views as auth_views
-
-from django.urls import path
-from . import views
-
-from django.shortcuts import render
-
+from . import views  # Importa tus vistas personalizadas
 
 # Lista de rutas disponibles en la aplicación
 urlpatterns = [
-    # Ruta para la página principal (portada de noticias)
+    # Página principal: muestra listado de noticias
     path('', views.inicio, name='inicio'),
 
-    # Ruta para ver el detalle de una noticia según su ID (pk = primary key)
+    # Detalle de una noticia según su ID
     path('noticia/<int:pk>/', views.detalle_noticia, name='detalle_noticia'),
 
+    # Agregar comentario a una noticia específica
     path('noticia/<int:pk>/comentario/', views.agregar_comentario, name='agregar_comentario'),
-    # Ruta para editar un comentario existente
 
-    
-    # Ruta para iniciar sesión (usa la vista incorporada de Django y un template personalizado)
+    # Página de login, utilizando el template personalizado 'login.html'
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 
-    # Ruta para cerrar sesión (redirecciona a 'inicio' después de salir)
+    # Logout: cierra sesión y redirige a la página de inicio
     path('logout/', auth_views.LogoutView.as_view(next_page='inicio'), name='logout'),
 
-    # Ruta para que un usuario se registre en el sitio (usa tu vista personalizada)
+    # Registro de nuevo usuario
     path('registro/', views.registro, name='registro'),
 
-    # Ruta para crear una nueva noticia (solo accesible para administradores)
+    # Crear nueva noticia (reservado para usuarios con permisos)
     path('crear_noticia/', views.crear_noticia, name='crear_noticia'),
-    
-    # Ruta para editar una noticia existente (solo accesible para administradores)
+
+    # Página "Acerca de"
     path('acerca-de/', views.acerca_de, name='acerca_de'),
-
-
-    
 ]

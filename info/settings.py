@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os  # Necesario para rutas con os.path.join
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
-    'widget_tweaks',
+    'blog',  # Tu app personalizada
+    'widget_tweaks',  # Para personalización de formularios en plantillas
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ ROOT_URLCONF = 'info.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # Se puede añadir aquí una ruta de plantillas global si querés
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,10 +117,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+# URL base para acceder a archivos estáticos
 STATIC_URL = '/static/'
+
+# Carpetas adicionales de archivos estáticos (ej: /static/css/, /static/js/)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Carpeta en la raíz del proyecto donde guardás archivos estáticos
+]
+
+# Carpeta donde Django recopila todos los archivos estáticos (para producción)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Archivos multimedia (subidos por el usuario)
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'  # Carpeta donde se almacenan archivos subidos
+
 # Redirigir después del login
 LOGIN_REDIRECT_URL = '/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
