@@ -25,6 +25,9 @@ urlpatterns = [
 
     # Crear nueva noticia (reservado para usuarios con permisos)
     path('crear_noticia/', views.crear_noticia, name='crear_noticia'),
+    
+    # Agregar ruta para editar noticia
+    path('noticia/<int:pk>/editar/', views.editar_noticia, name='editar_noticia'),
 
     # Página "Acerca de"
     path('acerca-de/', views.acerca_de, name='acerca_de'),

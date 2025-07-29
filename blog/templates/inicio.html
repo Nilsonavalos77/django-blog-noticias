@@ -1,47 +1,42 @@
-{% extends 'base.html' %}  {# Hereda de base.html para mantener estructura común #}
+{% extends 'base.html' %}  {# Hereda estructura base común #}
 
 {% block contenido %}
-<!-- Estilos CSS personalizados para que las imágenes tengan un tamaño uniforme -->
+<!-- Estilos CSS personalizados para imágenes uniformes -->
 <style>
 .img-card-fixed {
-    height: 180px;            /* Altura fija para todas las imágenes */
-    width: 100%;              /* Ancho completo */
-    object-fit: contain;      /* Escala sin recorte ni distorsión */
-    background-color: #f8f9fa;/* Fondo claro si sobra espacio */
+    height: 180px;               /* Altura fija para que todas tengan igual tamaño */
+    width: 100%;                 /* Ancho completo del contenedor */
+    object-fit: cover;           /* Rellena el área recortando sin deformar la imagen */
+    object-position: center;     /* Centra la imagen dentro del área recortada */
+    border-top-left-radius: 0.375rem;  /* Bordes redondeados arriba izquierda */
+    border-top-right-radius: 0.375rem; /* Bordes redondeados arriba derecha */
 }
 </style>
 
-<div class="row">  {# Fila principal que divide la pantalla en columnas #}
+<div class="row">  {# Contenedor fila Bootstrap para dividir columnas #}
 
-    <!-- 📰 Columna principal (noticias recientes) -->
-    <div class="col-md-9">
+    <div class="col-md-9">  {# Columna principal con ancho 9/12 en pantallas medianas en adelante #}
 
-        <!-- ✅ Botón para subir noticia (solo si el usuario está logueado) -->
         {% if user.is_authenticated and user.is_staff %}
-        <div class="mb-3 text-end">
+        <div class="mb-3 text-end">  {# Botón alineado a la derecha con margen inferior #}
             <a href="{% url 'crear_noticia' %}" class="btn btn-success">
                 <i class="fas fa-plus-circle"></i> Subir Noticia
             </a>
         </div>
         {% endif %}
 
-        <!-- Encabezado -->
-        <div class="d-flex align-items-center mb-4">
+        <div class="d-flex align-items-center mb-4">  {# Icono y título en línea con espacio abajo #}
             <i class="fas fa-newspaper fa-2x me-2 text-primary"></i>
             <h2 class="h3 m-0">Noticias Recientes</h2>
         </div>
 
-        <!-- ✅ Filtro por categorías -->
-        <div class="mb-4">
+        <div class="mb-4">  {# Filtro de categorías con margen inferior #}
             <h5 class="mb-2">Filtrar por categoría:</h5>
-            <div class="d-flex flex-wrap gap-2">
-                <!-- Opción "Todas" -->
+            <div class="d-flex flex-wrap gap-2">  {# Flexbox para que los botones se acomoden en filas #}
                 <a href="{% url 'inicio' %}" 
                    class="btn btn-outline-secondary btn-sm {% if not categoria_actual %}active{% endif %}">
                     Todas
                 </a>
-
-                <!-- Botones por cada categoría -->
                 {% for categoria in categorias %}
                     <a href="{% url 'inicio' %}?categoria={{ categoria.id }}"
                        class="btn btn-outline-primary btn-sm {% if categoria_actual == categoria.id %}active{% endif %}">
@@ -51,38 +46,26 @@
             </div>
         </div>
 
-        <!-- 📦 Noticias en cuadrícula (cards de Bootstrap) -->
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">  {# Grid responsivo con gap #}
             {% for noticia in noticias %}
             <div class="col">
-                <div class="card h-100 shadow-sm border-0 rounded">
-
-                    <!-- ✅ Imagen con clase personalizada para tamaño uniforme -->
+                <div class="card h-100 shadow-sm border-0 rounded">  {# Tarjeta con sombra, sin borde, y altura completa #}
                     {% if noticia.imagen %}
-                    <img src="{{ noticia.imagen.url }}" class="card-img-top rounded-top img-card-fixed" alt="Imagen de la noticia">
+                    <img src="{{ noticia.imagen.url }}" class="card-img-top img-card-fixed" alt="Imagen de la noticia">
                     {% endif %}
-
-                    <!-- Cuerpo de la card -->
                     <div class="card-body d-flex flex-column">
-                        <!-- Título de la noticia -->
                         <h5 class="card-title">
                             <a href="{% url 'detalle_noticia' noticia.pk %}" class="text-decoration-none text-primary">
                                 {{ noticia.titulo }}
                             </a>
                         </h5>
-
-                        <!-- Resumen breve -->
                         <p class="card-text text-muted flex-grow-1">
                             {{ noticia.resumen|truncatewords:30 }}
                         </p>
-
-                        <!-- Botón "Leer más" al pie -->
                         <a href="{% url 'detalle_noticia' noticia.pk %}" class="btn btn-sm btn-outline-primary mt-auto align-self-start">
                             Leer más →
                         </a>
                     </div>
-
-                    <!-- Pie de card con fecha -->
                     <div class="card-footer text-muted small">
                         Publicado: {{ noticia.fecha_publicacion|date:"d M Y" }}
                     </div>
@@ -94,16 +77,12 @@
         </div>
     </div>
 
-    <!-- ⭐ Columna lateral derecha (noticias destacadas) -->
-    <div class="col-md-3">
+    <div class="col-md-3">  {# Columna lateral derecha para noticias destacadas #}
         <div class="p-3 bg-light rounded shadow-sm" style="font-size: 0.9rem;">
-            <!-- Encabezado -->
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <i class="fas fa-star text-warning me-2"></i>
                 <h4 class="m-0">Noticias Destacadas</h4>
             </div>
-
-            <!-- Lista de noticias destacadas -->
             {% for noticia in noticias_destacadas %}
             <div class="mb-3 border-bottom pb-2">
                 <h6 class="text-primary">{{ noticia.titulo }}</h6>
@@ -113,6 +92,5 @@
             {% endfor %}
         </div>
     </div>
-
-</div>  {# Fin de la fila principal #}
+</div>
 {% endblock %}

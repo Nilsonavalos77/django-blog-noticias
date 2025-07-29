@@ -1,0 +1,44 @@
+from django.forms import modelform_factory
+
+@login_required
+def editar_noticia(request, pk):
+    noticia = get_object_or_404(Noticia, pk=pk)
+
+    # Permite solo al autor o al staff modificar la noticia
+    if not (request.user.is_staff or noticia.autor == request.user):
+        return HttpResponseForbidden("No tienes permiso para editar esta noticia.")
+
+    ComentarioFormSimple = modelform_factory(Comentario, fields=['texto'])
+
+    if request.method == 'POST':
+        # Diferenciamos qué formulario envió el usuario
+        if 'guardar_noticia' in request.POST:
+            form = NoticiaForm(request.POST, request.FILES, instance=noticia)
+            comentario_form = ComentarioFormSimple()
+            if form.is_valid():
+                form.save()
+                return redirect('detalle_noticia', pk=noticia.pk)
+        elif 'agregar_comentario' in request.POST:
+            form = NoticiaForm(instance=noticia)
+            comentario_form = ComentarioFormSimple(request.POST)
+            if comentario_form.is_valid():
+                nuevo_comentario = comentario_form.save(commit=False)
+                nuevo_comentario.autor = request.user
+                nuevo_comentario.noticia = noticia
+                nuevo_comentario.save()
+                return redirect('editar_noticia', pk=noticia.pk)
+        else:
+            form = NoticiaForm(instance=noticia)
+            comentario_form = ComentarioFormSimple()
+    else:
+        form = NoticiaForm(instance=noticia)
+        comentario_form = ComentarioFormSimple()
+
+    comentarios = noticia.comentarios.all()
+
+    return render(request, 'crear_noticia.html', {
+        'form': form,
+        'comentarios': comentarios,
+        'comentario_form': comentario_form,
+        'noticia': noticia,
+    })

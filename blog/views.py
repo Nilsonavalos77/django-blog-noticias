@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required  # ✅ Decorador para staff
 from django.db.models import Q
+from django.http import HttpResponseForbidden
 from .models import Noticia, Comentario, Categoria
 from .forms import NoticiaForm, ComentarioForm, CustomUserCreationForm
 
@@ -79,10 +80,14 @@ def crear_noticia(request):
     return render(request, 'crear_noticia.html', {'form': form})
 
 
-# ✅ Editar noticia - solo para admins
-@user_passes_test(es_admin)
+@login_required
 def editar_noticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
+
+    # Permitir solo al autor o staff editar
+    if not (request.user.is_staff or noticia.autor == request.user):
+        return HttpResponseForbidden("No tienes permiso para editar esta noticia.")
+
     if request.method == 'POST':
         form = NoticiaForm(request.POST, request.FILES, instance=noticia)
         if form.is_valid():
@@ -90,7 +95,14 @@ def editar_noticia(request, pk):
             return redirect('detalle_noticia', pk=noticia.pk)
     else:
         form = NoticiaForm(instance=noticia)
-    return render(request, 'crear_noticia.html', {'form': form})
+
+    comentarios = noticia.comentarios.all()  # 🔁 Obtener comentarios asociados
+
+    return render(request, 'crear_noticia.html', {
+        'form': form,
+        'noticia': noticia,
+        'comentarios': comentarios  # 👈 se los pasás al template
+    })
 
 
 # ✅ Eliminar noticia - solo para admins
