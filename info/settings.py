@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Seguridad y debugging
 SECRET_KEY = 'django-insecure-!=z3l=x3z39e0v7#d%z9h*$-#u@p95kbhk#qt5=ojy$x*d)9aj'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['julianamarighetti.pythonanywhere.com']
 
 # Aplicaciones instaladas (tu app blog incluida)
 INSTALLED_APPS = [
@@ -85,7 +85,7 @@ STATICFILES_DIRS = [
 ]
 
 # Carpeta destino para archivos estáticos cuando ejecutes collectstatic (producción)
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Archivos multimedia subidos por usuarios
 MEDIA_URL = '/media/'
