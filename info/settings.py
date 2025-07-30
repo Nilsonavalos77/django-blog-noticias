@@ -76,7 +76,7 @@ USE_TZ = True
 # Archivos estáticos (CSS, JS, imágenes)
 
 # URL base para acceder a archivos estáticos (ej: http://tusitio.com/static/)
-STATIC_URL = '/static/'
+STATIC_URL = os.path.join(BASE_DIR, 'staticfiles')
 
 # Directorios donde Django buscará archivos estáticos durante desarrollo
 STATICFILES_DIRS = [
